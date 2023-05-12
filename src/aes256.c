@@ -7,19 +7,20 @@
 #define AES_KEY_BITS 256
 #define IV_SIZE 16
 
-AESResult *atchops_aes256_encrypt(const char *key_base64, const unsigned char *plaintext, size_t len)
+AESResult *atchops_aes256_encrypt(const char *key_base64, const unsigned char *plaintext)
 {
+    size_t len = strlen(plaintext);
     // pad the plain text to be a multiple of 16 bytes
-    printf("Padding...\n");
+    // printf("Padding...\n");
     unsigned char *plaintext_padded;
     size_t plaintext_paddedlen;
 
-    const int mod = len % 16;
-    const int num_pad_bytes_to_add = 16 - mod;
+    const short int mod = len % 16;
+    const short int num_pad_bytes_to_add = 16 - mod;
     const unsigned char padding_val = num_pad_bytes_to_add;
 
     plaintext_paddedlen = len + num_pad_bytes_to_add;
-    printf("plaintext_paddedlen: %lu = %d + %d\n", plaintext_paddedlen, len, num_pad_bytes_to_add);
+    // printf("plaintext_paddedlen: %lu = %d + %d\n", plaintext_paddedlen, len, num_pad_bytes_to_add);
     plaintext_padded = malloc(sizeof(unsigned char) * (plaintext_paddedlen+1));
     for(int i = 0; i < len; i++)
     {
@@ -32,12 +33,11 @@ AESResult *atchops_aes256_encrypt(const char *key_base64, const unsigned char *p
         // printf("ib: %d\n", i);
     }
 
-
-    printf("Plaintext Padded: \"%s\"\n", plaintext_padded);
+    // printf("Plaintext Padded: \"%s\"\n", plaintext_padded);
 
     // initialize AES key
     unsigned char key[32];
-    const size_t *keylen = sizeof(key);
+    size_t keylen = sizeof(key);
     size_t *writtenlen = malloc(sizeof(size_t));
 
     atchops_base64_decode(key, keylen, writtenlen, key_base64, strlen(key_base64));
@@ -66,28 +66,27 @@ AESResult *atchops_aes256_encrypt(const char *key_base64, const unsigned char *p
     --aes_encryptedlen;
 
     // encode the encrypted data in base64
-    unsigned char *dst = malloc(sizeof(unsigned char) * 2048);
-    atchops_base64_encode(dst, 2048, writtenlen, aes_encrypted, aes_encryptedlen);
+    size_t dstlen = 2048;
+    unsigned char *dst = malloc(sizeof(unsigned char) * dstlen);
+    atchops_base64_encode(dst, dstlen, writtenlen, aes_encrypted, aes_encryptedlen);
 
-    printf("%s\n", dst);
+    // printf("%s\n", dst);
 
     // done
-    // AESResult *aes_result = malloc(sizeof(AESResult));
-    // aes_result->res = dst;
-    // aes_result->reslen = *writtenlen;
+    AESResult *aes_result = malloc(sizeof(AESResult));
+    aes_result->res = dst;
+    aes_result->reslen = *writtenlen;
 
-    // free(plaintext_paddedlen);
-    // mbedtls_aes_free(ctx);    
-    // free(iv_ctr);
-    // free(iv);
-    // free(stream_block);
-    // free(aes_encrypted);
-    // free(dstlen);
+    mbedtls_aes_free(ctx);    
+    free(iv_ctr);
+    free(iv);
+    free(stream_block);
+    free(aes_encrypted);
 
-    // return aes_result;
+    return aes_result;
 }
 
-AESResult *atchops_aes256_decrypt(const char *key, const unsigned char *plaintext, size_t len)
+AESResult *atchops_aes256_decrypt(const char *key, const unsigned char *plaintext)
 {
     AESResult *result = malloc(sizeof(AESResult));
     return result;
