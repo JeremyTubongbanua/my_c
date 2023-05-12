@@ -1,0 +1,17 @@
+.DS_Store
+
+CMakeFiles/
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+cmake_install.cmake
+
+build/
+
+lib/**/lib*.a
+
+sdkconfig
+
+__pycache__/
+
+.pio/
