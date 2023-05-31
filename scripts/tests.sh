@@ -1,4 +1,6 @@
+# sh clean.sh
+sh cmake.sh
 cd ../build
-rm tests
+rm -rf tests
 make
 ./tests
