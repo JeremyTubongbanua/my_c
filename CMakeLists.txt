@@ -15,7 +15,6 @@ target_link_libraries(at_chops PUBLIC mbedtls)
 target_link_libraries(at_chops PUBLIC mbedcrypto)
 target_link_libraries(at_chops PUBLIC mbedx509)
 
-
 file(GLOB_RECURSE tests ${CMAKE_SOURCE_DIR}/test/*.c)
 add_executable(tests ${tests})
 target_link_libraries(tests PRIVATE at_chops)
