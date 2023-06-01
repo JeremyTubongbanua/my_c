@@ -32,22 +32,41 @@ int main()
     printf("writtenlen: %lu\n", *writtenlen);
     printf("\n");
 
-    mbedtls_asn1_sequence *seq = malloc(sizeof(mbedtls_asn1_sequence));
+    int ret;
 
-    // int ret = mbedtls_asn1_get_sequence_of(&dst, dst + (*writtenlen), seq, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE | 0x30 | 0x02 | 0x04);
-    // printf("ret: %d\n", ret);
-
+    printf("1st get tag\n");
     size_t *lengthread = malloc(sizeof(size_t));
-    int ret = mbedtls_asn1_get_tag(&dst, dst + (*writtenlen), lengthread, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+    ret = mbedtls_asn1_get_tag(&dst, dst + (*writtenlen), lengthread, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
     printf("ret: %d\n", ret);
     printf("lengthread: %lu\n", *lengthread);
-    printf("*(dst+0) now poitns to : %02x\n", *(dst+0));
-    printf("*(dst+1) now poitns to : %02x\n", *(dst+1));
-    printf("*(dst+2) now poitns to : %02x\n", *(dst+2));
-    printf("*(dst+3) now poitns to : %02x\n", *(dst+3));
-    printf("*(dst+4) now poitns to : %02x\n", *(dst+4));
+    printf("*(dst+0) now points to : %02x\n", *(dst+0));
+    printf("*(dst+1) now points to : %02x\n", *(dst+1));
+    printf("*(dst+2) now points to : %02x\n", *(dst+2));
+    printf("*(dst+3) now points to : %02x\n", *(dst+3));
+    printf("*(dst+4) now points to : %02x\n", *(dst+4));
 
-    ret = mbedtls_asn1_get_tag(&dst, dst + (*lengthread), lengthread, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+    printf("2nd get tag\n");
+    size_t *lengthread2 = malloc(sizeof(size_t));
+    ret = mbedtls_asn1_get_tag(&dst, dst + (*writtenlen), lengthread2, MBEDTLS_ASN1_INTEGER);
     printf("ret: %d\n", ret);
+    printf("lengthread2: %lu\n", *lengthread2);
+    dst = dst + (*lengthread2);
+    printf("*(dst+0) now points to : %02x\n", *(dst+0));
+    printf("*(dst+1) now points to : %02x\n", *(dst+1));
+    printf("*(dst+2) now points to : %02x\n", *(dst+2));
+    printf("*(dst+3) now points to : %02x\n", *(dst+3));
+    printf("*(dst+4) now points to : %02x\n", *(dst+4));
+
+    printf("3rd get tag\n");
+    size_t *lengthread3 = malloc(sizeof(size_t));
+    ret = mbedtls_asn1_get_tag(&dst, dst + (*writtenlen), lengthread3, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+    printf("ret: %d\n", ret);
+    printf("lengthread3: %lu\n", *lengthread3);
+
+    // mbedtls_asn1_sequence *seq = malloc(sizeof(mbedtls_asn1_sequence));
+    // ret = mbedtls_asn1_get_sequence_of(&dst, dst + (*writtenlen), seq, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+    // printf("ret: %d\n", ret);
+    
+    
     return 0;
 }
