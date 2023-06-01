@@ -27,23 +27,27 @@ int main()
     size_t *writtenlen = malloc(sizeof(size_t) * 1);
     atchops_base64_decode(dst, dstlen, writtenlen, publickey, publickeylen);
 
-    // printf("\n");
-    // printx(dst, *writtenlen);
-    // printf("writtenlen: %lu\n", *writtenlen);
-    // printf("\n");
+    printf("\n");
+    printx(dst, *writtenlen);
+    printf("writtenlen: %lu\n", *writtenlen);
+    printf("\n");
 
     mbedtls_asn1_sequence *seq = malloc(sizeof(mbedtls_asn1_sequence));
 
-    int ret = mbedtls_asn1_get_tag(&dst, dst + *writtenlen, seq, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
-    printf("ret: %x\n", ret);
+    // int ret = mbedtls_asn1_get_sequence_of(&dst, dst + (*writtenlen), seq, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE | 0x30 | 0x02 | 0x04);
+    // printf("ret: %d\n", ret);
 
-    mbedtls_asn1_sequence *node = seq;
-    while(node != NULL)
-    {
-        printf("node->buf.tag: %d\n", node->buf.tag);
-        node = node->next;
-    }
+    size_t *lengthread = malloc(sizeof(size_t));
+    int ret = mbedtls_asn1_get_tag(&dst, dst + (*writtenlen), lengthread, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+    printf("ret: %d\n", ret);
+    printf("lengthread: %lu\n", *lengthread);
+    printf("*(dst+0) now poitns to : %02x\n", *(dst+0));
+    printf("*(dst+1) now poitns to : %02x\n", *(dst+1));
+    printf("*(dst+2) now poitns to : %02x\n", *(dst+2));
+    printf("*(dst+3) now poitns to : %02x\n", *(dst+3));
+    printf("*(dst+4) now poitns to : %02x\n", *(dst+4));
 
-
+    ret = mbedtls_asn1_get_tag(&dst, dst + (*lengthread), lengthread, MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE);
+    printf("ret: %d\n", ret);
     return 0;
 }
